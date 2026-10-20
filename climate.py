@@ -90,13 +90,13 @@ class EzrClimate(CoordinatorEntity, ClimateEntity):
         return float(self.area_data.get("T_TARGET_MAX", 30.0))
 
     @property
-    def native_current_temperature(self):
+    def current_temperature(self):
         """Return the current zone temperature."""
         value = self.area_data.get("T_ACTUAL")
         return float(value) if value is not None else None
 
     @property
-    def native_target_temperature(self):
+    def target_temperature(self):
         """Return the current target temperature."""
         value = self.area_data.get("T_TARGET")
         return float(value) if value is not None else None
