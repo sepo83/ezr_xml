@@ -9,7 +9,8 @@ that expose their data through the local XML interface.
 - Creates separate Home Assistant devices for the base station, heating zones,
   actuators, and associated thermostats.
 - Adds a writable Climate entity to each heating zone, with target temperature,
-  automatic/day/night presets, and global heating/cooling mode.
+  automatic/day/night presets, global heating/cooling mode, and actuator
+  status attributes.
 - Exposes available temperatures, target values, operating states, program
   information, actuator data, and device status as sensors.
 - Supports configurable polling intervals from 10 seconds to 1 hour.

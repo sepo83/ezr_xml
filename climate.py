@@ -123,6 +123,26 @@ class EzrClimate(CoordinatorEntity, ClimateEntity):
         return HVACAction.HEATING
 
     @property
+    def extra_state_attributes(self):
+        """Expose actuator values so changes are recorded with the climate state."""
+        actor_data = self.coordinator.data.get(
+            f"{ACTOR_KEY_PREFIX}{self.area_nr}",
+            {},
+        )
+        attributes = {}
+
+        if "ACTOR" in actor_data:
+            attributes["actuator_state"] = (
+                "open" if actor_data["ACTOR"] else "closed"
+            )
+        if "ACTOR_PERCENT" in actor_data:
+            attributes["actuator_percent"] = actor_data["ACTOR_PERCENT"]
+        if "INUSE" in actor_data:
+            attributes["actuator_assigned"] = bool(actor_data["INUSE"])
+
+        return attributes
+
+    @property
     def preset_mode(self):
         """Return the zone's automatic, day, or night preset."""
         mode = self.area_data.get("HEATAREA_MODE")
