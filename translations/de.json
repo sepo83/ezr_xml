@@ -1,0 +1,181 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "EZR XML Heizungssteuerung",
+        "description": "Gib die Basis-URL deines EZR-Geräts ein. Der Pfad /data/static.xml wird automatisch ergänzt.",
+        "data": {
+          "url": "Basis-URL des EZR-Geräts",
+          "scan_interval": "Abfrageintervall (Sekunden)"
+        },
+        "data_description": {
+          "url": "Beispiel: http://192.168.1.100"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Verbindung zum EZR-Gerät fehlgeschlagen."
+    },
+    "abort": {
+      "already_configured": "Dieses EZR-Gerät ist bereits eingerichtet."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "heatarea_name": {"name": "Heizzonenname"},
+      "heatarea_mode": {"name": "Betriebsmodus"},
+      "t_actual": {"name": "Isttemperatur"},
+      "t_actual_ext": {"name": "Externe Isttemperatur"},
+      "t_target": {"name": "Solltemperatur"},
+      "t_target_base": {"name": "Basis-Solltemperatur"},
+      "heatarea_state": {"name": "Heizzonenstatus"},
+      "program_source": {"name": "Programmquelle"},
+      "program_week": {"name": "Wochenprogramm"},
+      "program_weekend": {"name": "Wochenendprogramm"},
+      "party": {"name": "Party-Modus"},
+      "party_remainingtime": {"name": "Party-Restzeit"},
+      "presence": {"name": "Anwesenheit"},
+      "t_target_min": {"name": "Minimale Solltemperatur"},
+      "t_target_max": {"name": "Maximale Solltemperatur"},
+      "rpm_motor": {"name": "Motordrehzahl"},
+      "offset": {"name": "Temperatur-Offset"},
+      "t_heat_day": {"name": "Heiztemperatur Tag"},
+      "t_heat_night": {"name": "Heiztemperatur Nacht"},
+      "t_cool_day": {"name": "Kühltemperatur Tag"},
+      "t_cool_night": {"name": "Kühltemperatur Nacht"},
+      "t_floor_day": {"name": "Fußbodentemperatur Tag"},
+      "t_floor_max": {"name": "Maximale Fußbodentemperatur"},
+      "heatingsystem": {"name": "Heizungssystem"},
+      "block_hc": {"name": "Heizkreis-Sperre"},
+      "islocked": {"name": "Gesperrt"},
+      "lock_available": {"name": "Sperrcode verfügbar"},
+      "light": {"name": "Beleuchtung"},
+      "sensor_ext": {"name": "Externer Sensor"},
+      "t_target_adjustable": {"name": "Solltemperatur einstellbar"},
+      "actor": {"name": "Offen"},
+      "actor_percent": {"name": "Ventilöffnung"},
+      "heatctrl_state": {"name": "Heizstatus"},
+      "heatctrl_nr": {"name": "Zugeordneter Heizaktor"},
+      "inuse": {"name": "Zugeordnet"},
+      "base_system_antifreeze": {"name": "System – Frostschutz"},
+      "base_system_antifreeze_temp": {"name": "System – Frostschutztemperatur"},
+      "base_system_changeover": {"name": "System – Umschaltstatus"},
+      "base_system_cid": {"name": "System – Gerätekennung"},
+      "base_system_cooling": {"name": "System – Kühlfunktion"},
+      "base_system_datetime": {"name": "System – Gerätezeit"},
+      "base_system_dayofweek": {"name": "System – Wochentag"},
+      "base_system_eco_diff": {"name": "System – Eco-Differenz"},
+      "base_system_eco_input_state": {"name": "System – Eco-Eingangszustand"},
+      "base_system_eco_inputmode": {"name": "System – Eco-Eingangsmodus"},
+      "base_system_errorcount": {"name": "System – Fehleranzahl"},
+      "base_system_firstopen_time": {"name": "System – Erstöffnungszeit"},
+      "base_system_id": {"name": "System – Geräte-ID"},
+      "base_system_limiter": {"name": "System – Begrenzer"},
+      "base_system_lock_mode": {"name": "System – Sperrmodus"},
+      "base_system_masterid": {"name": "System – Master-ID"},
+      "base_system_mode": {"name": "System – Betriebsmodus"},
+      "base_system_name": {"name": "System – Gerätename"},
+      "base_system_ntptimesync": {"name": "System – NTP-Zeitsynchronisation"},
+      "base_system_operationmode_actor": {"name": "System – Betriebsmodus Stellantrieb"},
+      "base_system_origin": {"name": "System – Herkunft"},
+      "base_system_smartstart": {"name": "System – Smart Start"},
+      "base_system_summerwinter": {"name": "System – Sommer-/Winterbetrieb"},
+      "base_system_t_heat_vacation": {"name": "System – Urlaubstemperatur"},
+      "base_system_temperatureunit": {"name": "System – Temperatureinheit"},
+      "base_system_timezone": {"name": "System – Zeitzone"},
+      "base_system_tps": {"name": "System – TPS"},
+      "base_system_type": {"name": "System – Gerätetyp"},
+      "base_system_vers_hw": {"name": "System – Hardwareversion"},
+      "base_system_vers_sw_eth": {"name": "System – Softwareversion Ethernet"},
+      "base_system_vers_sw_stm": {"name": "System – Softwareversion Controller"},
+      "base_network_dhcp": {"name": "Netzwerk – DHCP aktiviert"},
+      "base_network_dns": {"name": "Netzwerk – DNS-Server"},
+      "base_network_gateway": {"name": "Netzwerk – Gateway"},
+      "base_network_ipv4actual": {"name": "Netzwerk – IPv4-Adresse aktuell"},
+      "base_network_ipv4set": {"name": "Netzwerk – IPv4-Adresse konfiguriert"},
+      "base_network_ipv6active": {"name": "Netzwerk – IPv6 aktiviert"},
+      "base_network_ipv6actual": {"name": "Netzwerk – IPv6-Adresse aktuell"},
+      "base_network_ipv6set": {"name": "Netzwerk – IPv6-Adresse konfiguriert"},
+      "base_network_mac": {"name": "Netzwerk – MAC-Adresse"},
+      "base_network_netmaskactual": {"name": "Netzwerk – Subnetzmaske aktuell"},
+      "base_network_netmaskset": {"name": "Netzwerk – Subnetzmaske konfiguriert"},
+      "base_vacation_end_date": {"name": "Urlaub – Enddatum"},
+      "base_vacation_end_time": {"name": "Urlaub – Endzeit"},
+      "base_vacation_start_date": {"name": "Urlaub – Startdatum"},
+      "base_vacation_start_time": {"name": "Urlaub – Startzeit"},
+      "base_vacation_vacation_state": {"name": "Urlaub – Status"},
+      "base_pump_output_localglobal": {"name": "Pumpenausgang – Lokaler/globaler Betrieb"},
+      "base_pump_output_minruntime": {"name": "Pumpenausgang – Mindestlaufzeit"},
+      "base_pump_output_minstandstill": {"name": "Pumpenausgang – Mindeststillstand"},
+      "base_pump_output_pump_isactive": {"name": "Pumpenausgang – Aktiv"},
+      "base_pump_output_pump_leadtime": {"name": "Pumpenausgang – Vorlaufzeit"},
+      "base_pump_output_pump_operationmode": {"name": "Pumpenausgang – Betriebsmodus"},
+      "base_pump_output_pump_output_type": {"name": "Pumpenausgang – Ausgangstyp"},
+      "base_pump_output_pump_stoppingtime": {"name": "Pumpenausgang – Nachlaufzeit"},
+      "base_relais_function": {"name": "Relais – Funktion"},
+      "base_relais_relais_boilermode": {"name": "Relais – Kesselmodus"},
+      "base_relais_relais_isactive": {"name": "Relais – Aktiv"},
+      "base_relais_relais_leadtime": {"name": "Relais – Vorlaufzeit"},
+      "base_relais_relais_operationmode": {"name": "Relais – Betriebsmodus"},
+      "base_relais_relais_stoppingtime": {"name": "Relais – Nachlaufzeit"},
+      "base_changeover_func_changeover_func_mode": {"name": "Umschaltfunktion – Modus"},
+      "base_emergencymode_emergencymode_time": {"name": "Notbetrieb – Zeit"},
+      "base_emergencymode_pwmcool": {"name": "Notbetrieb – PWM Kühlen"},
+      "base_emergencymode_pwmcycle": {"name": "Notbetrieb – PWM-Zyklus"},
+      "base_emergencymode_pwmheat": {"name": "Notbetrieb – PWM Heizen"},
+      "base_valveprotect_duration": {"name": "Ventilschutz – Dauer"},
+      "base_valveprotect_valveprotect_time": {"name": "Ventilschutz – Intervall"},
+      "base_pumpprotect_duration": {"name": "Pumpenschutz – Dauer"},
+      "base_pumpprotect_pumpprotect_time": {"name": "Pumpenschutz – Intervall"},
+      "base_io_device_battery": {"name": "I/O-Gerät – Batteriestatus"},
+      "base_io_device_comerror": {"name": "I/O-Gerät – Kommunikationsfehler"},
+      "base_io_device_heatarea_nr": {"name": "I/O-Gerät – Zugeordnete Heizzone"},
+      "base_io_device_id": {"name": "I/O-Gerät – Geräte-ID"},
+      "base_io_device_ison": {"name": "I/O-Gerät – Eingeschaltet"},
+      "base_io_device_signalstrength": {"name": "I/O-Gerät – Signalstärke"},
+      "base_io_device_state": {"name": "I/O-Gerät – Gerätestatus"},
+      "base_io_device_type": {"name": "I/O-Gerät – Gerätetyp"},
+      "base_io_device_vers_hw": {"name": "I/O-Gerät – Hardwareversion"},
+      "base_io_device_vers_sw": {"name": "I/O-Gerät – Softwareversion"},
+      "io_device_battery": {"name": "Batteriestatus"},
+      "io_device_comerror": {"name": "Kommunikationsfehler"},
+      "io_device_heatarea_nr": {"name": "Zugeordnete Heizzone"},
+      "io_device_id": {"name": "Geräte-ID"},
+      "io_device_ison": {"name": "Eingeschaltet"},
+      "io_device_signalstrength": {"name": "Signalstärke"},
+      "io_device_state": {"name": "Gerätestatus"},
+      "io_device_type": {"name": "Gerätetyp"},
+      "io_device_vers_hw": {"name": "Hardwareversion"},
+      "io_device_vers_sw": {"name": "Softwareversion"}
+    },
+    "climate": {
+      "climate": {
+        "name": "Klima",
+        "state_attributes": {
+          "preset_mode": {
+            "name": "Voreinstellung",
+            "state": {"auto": "Automatik", "day": "Tag", "night": "Nacht"}
+          },
+          "actuator_state": {
+            "name": "Stellantriebsstatus",
+            "state": {"open": "Offen", "closed": "Geschlossen"}
+          },
+          "actuator_assigned": {
+            "name": "Stellantrieb zugeordnet",
+            "state": {"true": "Zugeordnet", "false": "Nicht zugeordnet"}
+          }
+        }
+      }
+    }
+  },
+  "device": {
+    "base_station": {"name": "EZR-Basisstation"},
+    "named_base_station": {"name": "{name}"},
+    "heating_zone": {"name": "{zone_name}"},
+    "unnamed_heating_zone": {"name": "Heizzone {zone_number}"},
+    "thermostat": {"name": "{zone_name} Thermostat"},
+    "unnamed_thermostat": {"name": "Thermostat für Heizzone {zone_number}"},
+    "actuator": {"name": "{zone_name} Stellantrieb"},
+    "unnamed_actuator": {"name": "Stellantrieb für Heizzone {zone_number}"}
+  }
+}

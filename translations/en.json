@@ -1,0 +1,181 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "EZR XML Heating Controller",
+        "description": "Enter the base URL of your EZR device. The /data/static.xml path is added automatically.",
+        "data": {
+          "url": "EZR device base URL",
+          "scan_interval": "Update interval (seconds)"
+        },
+        "data_description": {
+          "url": "Example: http://192.168.1.100"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Unable to connect to the EZR device."
+    },
+    "abort": {
+      "already_configured": "This EZR device is already configured."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "heatarea_name": {"name": "Heating zone name"},
+      "heatarea_mode": {"name": "Operating mode"},
+      "t_actual": {"name": "Current temperature"},
+      "t_actual_ext": {"name": "External current temperature"},
+      "t_target": {"name": "Target temperature"},
+      "t_target_base": {"name": "Base target temperature"},
+      "heatarea_state": {"name": "Heating zone state"},
+      "program_source": {"name": "Program source"},
+      "program_week": {"name": "Weekly program"},
+      "program_weekend": {"name": "Weekend program"},
+      "party": {"name": "Party mode"},
+      "party_remainingtime": {"name": "Party time remaining"},
+      "presence": {"name": "Presence"},
+      "t_target_min": {"name": "Minimum target temperature"},
+      "t_target_max": {"name": "Maximum target temperature"},
+      "rpm_motor": {"name": "Motor speed"},
+      "offset": {"name": "Temperature offset"},
+      "t_heat_day": {"name": "Day heating temperature"},
+      "t_heat_night": {"name": "Night heating temperature"},
+      "t_cool_day": {"name": "Day cooling temperature"},
+      "t_cool_night": {"name": "Night cooling temperature"},
+      "t_floor_day": {"name": "Day floor temperature"},
+      "t_floor_max": {"name": "Maximum floor temperature"},
+      "heatingsystem": {"name": "Heating system"},
+      "block_hc": {"name": "Heating circuit lock"},
+      "islocked": {"name": "Locked"},
+      "lock_available": {"name": "Lock code available"},
+      "light": {"name": "Light"},
+      "sensor_ext": {"name": "External sensor"},
+      "t_target_adjustable": {"name": "Target temperature adjustable"},
+      "actor": {"name": "Open"},
+      "actor_percent": {"name": "Valve opening"},
+      "heatctrl_state": {"name": "Heating status"},
+      "heatctrl_nr": {"name": "Assigned actuator"},
+      "inuse": {"name": "Assigned"},
+      "base_system_antifreeze": {"name": "System – Frost protection"},
+      "base_system_antifreeze_temp": {"name": "System – Frost protection temperature"},
+      "base_system_changeover": {"name": "System – Changeover status"},
+      "base_system_cid": {"name": "System – Device identifier"},
+      "base_system_cooling": {"name": "System – Cooling function"},
+      "base_system_datetime": {"name": "System – Device time"},
+      "base_system_dayofweek": {"name": "System – Day of week"},
+      "base_system_eco_diff": {"name": "System – Eco differential"},
+      "base_system_eco_input_state": {"name": "System – Eco input state"},
+      "base_system_eco_inputmode": {"name": "System – Eco input mode"},
+      "base_system_errorcount": {"name": "System – Error count"},
+      "base_system_firstopen_time": {"name": "System – First opening time"},
+      "base_system_id": {"name": "System – Device ID"},
+      "base_system_limiter": {"name": "System – Limiter"},
+      "base_system_lock_mode": {"name": "System – Lock mode"},
+      "base_system_masterid": {"name": "System – Master ID"},
+      "base_system_mode": {"name": "System – Operating mode"},
+      "base_system_name": {"name": "System – Device name"},
+      "base_system_ntptimesync": {"name": "System – NTP time synchronization"},
+      "base_system_operationmode_actor": {"name": "System – Actuator operating mode"},
+      "base_system_origin": {"name": "System – Origin"},
+      "base_system_smartstart": {"name": "System – Smart start"},
+      "base_system_summerwinter": {"name": "System – Summer/winter mode"},
+      "base_system_t_heat_vacation": {"name": "System – Vacation temperature"},
+      "base_system_temperatureunit": {"name": "System – Temperature unit"},
+      "base_system_timezone": {"name": "System – Time zone"},
+      "base_system_tps": {"name": "System – TPS"},
+      "base_system_type": {"name": "System – Device type"},
+      "base_system_vers_hw": {"name": "System – Hardware version"},
+      "base_system_vers_sw_eth": {"name": "System – Ethernet software version"},
+      "base_system_vers_sw_stm": {"name": "System – Controller software version"},
+      "base_network_dhcp": {"name": "Network – DHCP enabled"},
+      "base_network_dns": {"name": "Network – DNS server"},
+      "base_network_gateway": {"name": "Network – Gateway"},
+      "base_network_ipv4actual": {"name": "Network – Current IPv4 address"},
+      "base_network_ipv4set": {"name": "Network – Configured IPv4 address"},
+      "base_network_ipv6active": {"name": "Network – IPv6 enabled"},
+      "base_network_ipv6actual": {"name": "Network – Current IPv6 address"},
+      "base_network_ipv6set": {"name": "Network – Configured IPv6 address"},
+      "base_network_mac": {"name": "Network – MAC address"},
+      "base_network_netmaskactual": {"name": "Network – Current subnet mask"},
+      "base_network_netmaskset": {"name": "Network – Configured subnet mask"},
+      "base_vacation_end_date": {"name": "Vacation – End date"},
+      "base_vacation_end_time": {"name": "Vacation – End time"},
+      "base_vacation_start_date": {"name": "Vacation – Start date"},
+      "base_vacation_start_time": {"name": "Vacation – Start time"},
+      "base_vacation_vacation_state": {"name": "Vacation – Status"},
+      "base_pump_output_localglobal": {"name": "Pump output – Local/global operation"},
+      "base_pump_output_minruntime": {"name": "Pump output – Minimum runtime"},
+      "base_pump_output_minstandstill": {"name": "Pump output – Minimum standby time"},
+      "base_pump_output_pump_isactive": {"name": "Pump output – Active"},
+      "base_pump_output_pump_leadtime": {"name": "Pump output – Lead time"},
+      "base_pump_output_pump_operationmode": {"name": "Pump output – Operating mode"},
+      "base_pump_output_pump_output_type": {"name": "Pump output – Output type"},
+      "base_pump_output_pump_stoppingtime": {"name": "Pump output – Run-on time"},
+      "base_relais_function": {"name": "Relay – Function"},
+      "base_relais_relais_boilermode": {"name": "Relay – Boiler mode"},
+      "base_relais_relais_isactive": {"name": "Relay – Active"},
+      "base_relais_relais_leadtime": {"name": "Relay – Lead time"},
+      "base_relais_relais_operationmode": {"name": "Relay – Operating mode"},
+      "base_relais_relais_stoppingtime": {"name": "Relay – Run-on time"},
+      "base_changeover_func_changeover_func_mode": {"name": "Changeover function – Mode"},
+      "base_emergencymode_emergencymode_time": {"name": "Emergency mode – Time"},
+      "base_emergencymode_pwmcool": {"name": "Emergency mode – PWM cooling"},
+      "base_emergencymode_pwmcycle": {"name": "Emergency mode – PWM cycle"},
+      "base_emergencymode_pwmheat": {"name": "Emergency mode – PWM heating"},
+      "base_valveprotect_duration": {"name": "Valve protection – Duration"},
+      "base_valveprotect_valveprotect_time": {"name": "Valve protection – Interval"},
+      "base_pumpprotect_duration": {"name": "Pump protection – Duration"},
+      "base_pumpprotect_pumpprotect_time": {"name": "Pump protection – Interval"},
+      "base_io_device_battery": {"name": "I/O device – Battery"},
+      "base_io_device_comerror": {"name": "I/O device – Communication error"},
+      "base_io_device_heatarea_nr": {"name": "I/O device – Assigned heating zone"},
+      "base_io_device_id": {"name": "I/O device – Device ID"},
+      "base_io_device_ison": {"name": "I/O device – Switched on"},
+      "base_io_device_signalstrength": {"name": "I/O device – Signal strength"},
+      "base_io_device_state": {"name": "I/O device – Device status"},
+      "base_io_device_type": {"name": "I/O device – Device type"},
+      "base_io_device_vers_hw": {"name": "I/O device – Hardware version"},
+      "base_io_device_vers_sw": {"name": "I/O device – Software version"},
+      "io_device_battery": {"name": "Battery"},
+      "io_device_comerror": {"name": "Communication error"},
+      "io_device_heatarea_nr": {"name": "Assigned heating zone"},
+      "io_device_id": {"name": "Device ID"},
+      "io_device_ison": {"name": "Switched on"},
+      "io_device_signalstrength": {"name": "Signal strength"},
+      "io_device_state": {"name": "Device status"},
+      "io_device_type": {"name": "Device type"},
+      "io_device_vers_hw": {"name": "Hardware version"},
+      "io_device_vers_sw": {"name": "Software version"}
+    },
+    "climate": {
+      "climate": {
+        "name": "Climate",
+        "state_attributes": {
+          "preset_mode": {
+            "name": "Preset",
+            "state": {"auto": "Automatic", "day": "Day", "night": "Night"}
+          },
+          "actuator_state": {
+            "name": "Actuator state",
+            "state": {"open": "Open", "closed": "Closed"}
+          },
+          "actuator_assigned": {
+            "name": "Actuator assigned",
+            "state": {"true": "Assigned", "false": "Not assigned"}
+          }
+        }
+      }
+    }
+  },
+  "device": {
+    "base_station": {"name": "EZR Base Station"},
+    "named_base_station": {"name": "{name}"},
+    "heating_zone": {"name": "{zone_name}"},
+    "unnamed_heating_zone": {"name": "Heating zone {zone_number}"},
+    "thermostat": {"name": "{zone_name} Thermostat"},
+    "unnamed_thermostat": {"name": "Thermostat for heating zone {zone_number}"},
+    "actuator": {"name": "{zone_name} Actuator"},
+    "unnamed_actuator": {"name": "Actuator for heating zone {zone_number}"}
+  }
+}

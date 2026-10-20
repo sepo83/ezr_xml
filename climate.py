@@ -32,7 +32,7 @@ class EzrClimate(CoordinatorEntity, ClimateEntity):
     """Represent one EZR heating zone."""
 
     _attr_has_entity_name = True
-    _attr_name = "Klima"
+    _attr_translation_key = "climate"
     _attr_temperature_unit = UnitOfTemperature.CELSIUS
     _attr_target_temperature_step = 0.2
     _attr_supported_features = (
@@ -67,16 +67,22 @@ class EzrClimate(CoordinatorEntity, ClimateEntity):
     @property
     def device_info(self):
         """Attach this entity to its heating-zone device."""
-        area_name = self.area_data.get("HEATAREA_NAME") or (
-            f"Heizzone {self.area_nr}"
-        )
+        area_name = self.area_data.get("HEATAREA_NAME")
         return {
             "identifiers": {
                 (DOMAIN, f"{self.config_entry_id}_area_{self.area_nr}"),
             },
-            "name": str(area_name),
+            "name": str(area_name or f"Heating zone {self.area_nr}"),
+            "translation_key": (
+                "heating_zone" if area_name else "unnamed_heating_zone"
+            ),
+            "translation_placeholders": (
+                {"zone_name": str(area_name)}
+                if area_name
+                else {"zone_number": self.area_nr}
+            ),
             "manufacturer": MANUFACTURER,
-            "model": "Heizzone",
+            "model": "HEATAREA",
         }
 
     @property

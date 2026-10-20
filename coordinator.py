@@ -140,8 +140,8 @@ def _flatten_group(element, prefix, result):
 def _build_base_station(device):
     """Extract base-station information, excluding ignored groups."""
     result = {
-        "__name__": _value(device, "NAME") or "EZR-Basisstation",
-        "__model__": "Basisstation",
+        "__name__": _value(device, "NAME"),
+        "__model__": "EZR",
     }
 
     for child in device:
@@ -295,15 +295,13 @@ class EzrCoordinator(DataUpdateCoordinator):
             TimeoutError,
         ) as err:
             raise UpdateFailed(
-                f"XML konnte nicht abgerufen oder geparst werden: {err}"
+                f"Unable to fetch or parse XML: {err}"
             ) from err
 
         device = root.find(".//Device")
 
         if device is None:
-            raise UpdateFailed(
-                "Kein Device-Element in der XML-Datei gefunden"
-            )
+            raise UpdateFailed("No Device element found in the XML")
 
         # The base station gets its own device in Home Assistant.
         result = {
@@ -344,9 +342,8 @@ class EzrCoordinator(DataUpdateCoordinator):
             actor_data = None
 
             if controller is not None:
-                area_name = data.get("HEATAREA_NAME") or f"Heizzone {area_nr}"
                 actor_data = {
-                    "__name__": f"{area_name} Stellantrieb",
+                    "__zone_name__": data.get("HEATAREA_NAME"),
                     "__area_nr__": area_nr,
                 }
                 controller_nr = controller.get("nr")
@@ -378,17 +375,14 @@ class EzrCoordinator(DataUpdateCoordinator):
                 continue
 
             area_name = result[area_key].get("HEATAREA_NAME")
-            area_name = area_name or f"Heizzone {area_key}"
             io_data = {
-                "__name__": f"{area_name} Thermostat",
+                "__zone_name__": area_name,
                 "__area_nr__": area_key,
             }
             _flatten_group(io_device, f"IODEVICE_{io_nr}", io_data)
             result[f"{IODEVICE_KEY_PREFIX}{io_nr}"] = io_data
 
         if not areas:
-            raise UpdateFailed(
-                "Keine HEATAREA-Elemente in der XML-Datei gefunden"
-            )
+            raise UpdateFailed("No HEATAREA elements found in the XML")
 
         return result

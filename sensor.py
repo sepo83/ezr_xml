@@ -20,113 +20,113 @@ from .coordinator import (
 
 
 SENSOR_FIELDS = {
-    "HEATAREA_NAME": ("Heizzonenname", None, None, None),
-    "HEATAREA_MODE": ("Betriebsmodus", None, None, None),
+    "HEATAREA_NAME": ("heatarea_name", None, None, None),
+    "HEATAREA_MODE": ("heatarea_mode", None, None, None),
     "T_ACTUAL": (
-        "Isttemperatur",
+        "t_actual",
         UnitOfTemperature.CELSIUS,
         SensorDeviceClass.TEMPERATURE,
         SensorStateClass.MEASUREMENT,
     ),
     "T_ACTUAL_EXT": (
-        "Externe Isttemperatur",
+        "t_actual_ext",
         UnitOfTemperature.CELSIUS,
         SensorDeviceClass.TEMPERATURE,
         SensorStateClass.MEASUREMENT,
     ),
     "T_TARGET": (
-        "Solltemperatur",
+        "t_target",
         UnitOfTemperature.CELSIUS,
         SensorDeviceClass.TEMPERATURE,
         SensorStateClass.MEASUREMENT,
     ),
     "T_TARGET_BASE": (
-        "Basis-Solltemperatur",
+        "t_target_base",
         UnitOfTemperature.CELSIUS,
         SensorDeviceClass.TEMPERATURE,
         SensorStateClass.MEASUREMENT,
     ),
-    "HEATAREA_STATE": ("Heizzonenstatus", None, None, None),
-    "PROGRAM_SOURCE": ("Programmquelle", None, None, None),
-    "PROGRAM_WEEK": ("Wochenprogramm", None, None, None),
-    "PROGRAM_WEEKEND": ("Wochenendprogramm", None, None, None),
-    "PARTY": ("Party-Modus", None, None, None),
-    "PARTY_REMAININGTIME": ("Party-Restzeit", "min", None, None),
-    "PRESENCE": ("Anwesenheit", None, None, None),
+    "HEATAREA_STATE": ("heatarea_state", None, None, None),
+    "PROGRAM_SOURCE": ("program_source", None, None, None),
+    "PROGRAM_WEEK": ("program_week", None, None, None),
+    "PROGRAM_WEEKEND": ("program_weekend", None, None, None),
+    "PARTY": ("party", None, None, None),
+    "PARTY_REMAININGTIME": ("party_remainingtime", "min", None, None),
+    "PRESENCE": ("presence", None, None, None),
     "T_TARGET_MIN": (
-        "Minimale Solltemperatur",
+        "t_target_min",
         UnitOfTemperature.CELSIUS,
         SensorDeviceClass.TEMPERATURE,
         SensorStateClass.MEASUREMENT,
     ),
     "T_TARGET_MAX": (
-        "Maximale Solltemperatur",
+        "t_target_max",
         UnitOfTemperature.CELSIUS,
         SensorDeviceClass.TEMPERATURE,
         SensorStateClass.MEASUREMENT,
     ),
-    "RPM_MOTOR": ("Motordrehzahl", None, None, None),
+    "RPM_MOTOR": ("rpm_motor", None, None, None),
     "OFFSET": (
-        "Temperatur-Offset",
+        "offset",
         UnitOfTemperature.CELSIUS,
         SensorDeviceClass.TEMPERATURE,
         SensorStateClass.MEASUREMENT,
     ),
     "T_HEAT_DAY": (
-        "Heiztemperatur Tag",
+        "t_heat_day",
         UnitOfTemperature.CELSIUS,
         SensorDeviceClass.TEMPERATURE,
         SensorStateClass.MEASUREMENT,
     ),
     "T_HEAT_NIGHT": (
-        "Heiztemperatur Nacht",
+        "t_heat_night",
         UnitOfTemperature.CELSIUS,
         SensorDeviceClass.TEMPERATURE,
         SensorStateClass.MEASUREMENT,
     ),
     "T_COOL_DAY": (
-        "Kühltemperatur Tag",
+        "t_cool_day",
         UnitOfTemperature.CELSIUS,
         SensorDeviceClass.TEMPERATURE,
         SensorStateClass.MEASUREMENT,
     ),
     "T_COOL_NIGHT": (
-        "Kühltemperatur Nacht",
+        "t_cool_night",
         UnitOfTemperature.CELSIUS,
         SensorDeviceClass.TEMPERATURE,
         SensorStateClass.MEASUREMENT,
     ),
     "T_FLOOR_DAY": (
-        "Fußbodentemperatur Tag",
+        "t_floor_day",
         UnitOfTemperature.CELSIUS,
         SensorDeviceClass.TEMPERATURE,
         SensorStateClass.MEASUREMENT,
     ),
     "T_FLOOR_MAX": (
-        "Maximale Fußbodentemperatur",
+        "t_floor_max",
         UnitOfTemperature.CELSIUS,
         SensorDeviceClass.TEMPERATURE,
         SensorStateClass.MEASUREMENT,
     ),
-    "HEATINGSYSTEM": ("Heizungssystem", None, None, None),
-    "BLOCK_HC": ("Heizkreis-Sperre", None, None, None),
-    "ISLOCKED": ("Gesperrt", None, None, None),
-    "LOCK_AVAILABLE": ("Sperrcode verfügbar", None, None, None),
-    "LIGHT": ("Beleuchtung", None, None, None),
-    "SENSOR_EXT": ("Externer Sensor", None, None, None),
+    "HEATINGSYSTEM": ("heatingsystem", None, None, None),
+    "BLOCK_HC": ("block_hc", None, None, None),
+    "ISLOCKED": ("islocked", None, None, None),
+    "LOCK_AVAILABLE": ("lock_available", None, None, None),
+    "LIGHT": ("light", None, None, None),
+    "SENSOR_EXT": ("sensor_ext", None, None, None),
     "T_TARGET_ADJUSTABLE": (
-        "Solltemperatur einstellbar",
+        "t_target_adjustable",
         None,
         None,
         None,
     ),
 
     # Stellantrieb / ACTOR
-    "ACTOR": ("Offen", None, None, None),
-    "ACTOR_PERCENT": ("Ventilöffnung", PERCENTAGE, None, None),
-    "HEATCTRL_STATE": ("Heizstatus", None, None, None),
-    "HEATCTRL_NR": ("Zugeordneter Heizaktor", None, None, None),
-    "INUSE": ("In Verwendung", None, None, None),
+    "ACTOR": ("actor", None, None, None),
+    "ACTOR_PERCENT": ("actor_percent", PERCENTAGE, None, None),
+    "HEATCTRL_STATE": ("heatctrl_state", None, None, None),
+    "HEATCTRL_NR": ("heatctrl_nr", None, None, None),
+    "INUSE": ("inuse", None, None, None),
 }
 
 
@@ -178,118 +178,16 @@ SENSOR_ICONS = {
 }
 
 
-# Deutsche Bezeichnungen der Felder in der Basisstation.
-BASE_FIELD_LABELS = {
-    # System
-    "ID": "Geräte-ID",
-    "TYPE": "Gerätetyp",
-    "NAME": "Gerätename",
-    "ORIGIN": "Herkunft",
-    "CID": "Gerätekennung",
-    "ERRORCOUNT": "Fehleranzahl",
-    "DATETIME": "Gerätezeit",
-    "DAYOFWEEK": "Wochentag",
-    "TIMEZONE": "Zeitzone",
-    "NTPTIMESYNC": "NTP-Zeitsynchronisation",
-    "VERS_SW_STM": "Softwareversion Controller",
-    "VERS_SW_ETH": "Softwareversion Ethernet",
-    "VERS_HW": "Hardwareversion",
-    "TEMPERATUREUNIT": "Temperatureinheit",
-    "SUMMERWINTER": "Sommer-/Winterbetrieb",
-    "TPS": "TPS",
-    "LIMITER": "Begrenzer",
-    "MASTERID": "Master-ID",
-    "CHANGEOVER": "Umschaltstatus",
-    "COOLING": "Kühlfunktion",
-    "MODE": "Betriebsmodus",
-    "OPERATIONMODE_ACTOR": "Betriebsmodus Stellantrieb",
-    "ANTIFREEZE": "Frostschutz",
-    "ANTIFREEZE_TEMP": "Frostschutztemperatur",
-    "FIRSTOPEN_TIME": "Erstöffnungszeit",
-    "SMARTSTART": "Smart Start",
-    "LOCK_MODE": "Sperrmodus",
-    "ECO_DIFF": "Eco-Differenz",
-    "ECO_INPUTMODE": "Eco-Eingangsmodus",
-    "ECO_INPUT_STATE": "Eco-Eingangszustand",
-    "T_HEAT_VACATION": "Urlaubstemperatur",
-
-    # Netzwerk
-    "MAC": "MAC-Adresse",
-    "DHCP": "DHCP aktiviert",
-    "IPV6ACTIVE": "IPv6 aktiviert",
-    "IPV4ACTUAL": "IPv4-Adresse aktuell",
-    "IPV4SET": "IPv4-Adresse konfiguriert",
-    "IPV6ACTUAL": "IPv6-Adresse aktuell",
-    "IPV6SET": "IPv6-Adresse konfiguriert",
-    "NETMASKACTUAL": "Subnetzmaske aktuell",
-    "NETMASKSET": "Subnetzmaske konfiguriert",
-    "DNS": "DNS-Server",
-    "GATEWAY": "Gateway",
-
-    # Urlaub
-    "VACATION_STATE": "Status",
-    "START_DATE": "Startdatum",
-    "START_TIME": "Startzeit",
-    "END_DATE": "Enddatum",
-    "END_TIME": "Endzeit",
-
-    # Pumpenausgang
-    "LOCALGLOBAL": "Lokaler/globaler Betrieb",
-    "PUMP_ISACTIVE": "Aktiv",
-    "PUMP_OUTPUT_TYPE": "Ausgangstyp",
-    "PUMP_LEADTIME": "Vorlaufzeit",
-    "PUMP_STOPPINGTIME": "Nachlaufzeit",
-    "PUMP_OPERATIONMODE": "Betriebsmodus",
-    "MINRUNTIME": "Mindestlaufzeit",
-    "MINSTANDSTILL": "Mindeststillstand",
-
-    # Relais
-    "FUNCTION": "Funktion",
-    "RELAIS_ISACTIVE": "Aktiv",
-    "RELAIS_LEADTIME": "Vorlaufzeit",
-    "RELAIS_STOPPINGTIME": "Nachlaufzeit",
-    "RELAIS_OPERATIONMODE": "Betriebsmodus",
-    "RELAIS_BOILERMODE": "Kesselmodus",
-
-    # Umschaltung
-    "CHANGEOVER_FUNC_MODE": "Modus",
-
-    # Notbetrieb
-    "EMERGENCYMODE_TIME": "Zeit",
-    "PWMCYCLE": "PWM-Zyklus",
-    "PWMHEAT": "PWM Heizen",
-    "PWMCOOL": "PWM Kühlen",
-
-    # Schutzfunktionen
-    "VALVEPROTECT_TIME": "Intervall",
-    "PUMPPROTECT_TIME": "Intervall",
-    "DURATION": "Dauer",
-
-    # I/O-Geräte
-    "IODEVICE_TYPE": "Gerätetyp",
-    "IODEVICE_ID": "Geräte-ID",
-    "IODEVICE_VERS_HW": "Hardwareversion",
-    "IODEVICE_VERS_SW": "Softwareversion",
-    "HEATAREA_NR": "Zugeordnete Heizzone",
-    "SIGNALSTRENGTH": "Signalstärke",
-    "BATTERY": "Batteriestatus",
-    "IODEVICE_STATE": "Gerätestatus",
-    "IODEVICE_COMERROR": "Kommunikationsfehler",
-    "ISON": "Eingeschaltet",
-}
-
-
-BASE_GROUP_LABELS = {
-    "SYSTEM": "System",
-    "NETWORK": "Netzwerk",
-    "VACATION": "Urlaub",
-    "PUMP_OUTPUT": "Pumpenausgang",
-    "RELAIS": "Relais",
-    "CHANGEOVER_FUNC": "Umschaltfunktion",
-    "EMERGENCYMODE": "Notbetrieb",
-    "VALVEPROTECT": "Ventilschutz",
-    "PUMPPROTECT": "Pumpenschutz",
-}
+BASE_GROUP_PREFIXES = (
+    "NETWORK",
+    "VACATION",
+    "PUMP_OUTPUT",
+    "RELAIS",
+    "CHANGEOVER_FUNC",
+    "EMERGENCYMODE",
+    "VALVEPROTECT",
+    "PUMPPROTECT",
+)
 
 
 BASE_GROUP_ICONS = {
@@ -353,54 +251,37 @@ BASE_FIELD_ICONS = {
 }
 
 
-def _humanize_field(field):
-    """Create a readable fallback label from an XML field name."""
-    return field.replace("_", " ").capitalize()
-
-
-def _io_device_label(field):
-    """Return an I/O device field label without a device prefix."""
+def _io_device_translation_key(field):
+    """Return a translation key for an I/O device field."""
     match = re.fullmatch(r"IODEVICE_\d+_(.+)", field)
 
     if not match:
-        return _humanize_field(field)
+        return field.lower()
 
-    subfield = match.group(1)
-    return BASE_FIELD_LABELS.get(subfield, _humanize_field(subfield))
+    subfield = match.group(1).removeprefix("IODEVICE_")
+    return f"io_device_{subfield.lower()}"
 
 
-def _base_station_label(field):
-    """Create a German name with the group name as prefix."""
+def _base_station_translation_key(field):
+    """Return a translation key for a base-station field."""
     match = re.fullmatch(r"IODEVICE_(\d+)_(.+)", field)
 
     if match:
-        device_nr, subfield = match.groups()
-        label = BASE_FIELD_LABELS.get(
-            subfield,
-            _humanize_field(subfield),
-        )
-        return f"IO-Gerät {device_nr} – {label}"
+        subfield = match.group(2).removeprefix("IODEVICE_")
+        return f"base_io_device_{subfield.lower()}"
 
     if field.startswith("SYSTEM_"):
         subfield = field.removeprefix("SYSTEM_")
-        label = BASE_FIELD_LABELS.get(
-            subfield,
-            _humanize_field(subfield),
-        )
-        return f"System – {label}"
+        return f"base_system_{subfield.lower()}"
 
-    for prefix, group_label in BASE_GROUP_LABELS.items():
+    for prefix in BASE_GROUP_PREFIXES:
         marker = f"{prefix}_"
 
         if field.startswith(marker):
             subfield = field.removeprefix(marker)
-            label = BASE_FIELD_LABELS.get(
-                subfield,
-                _humanize_field(subfield),
-            )
-            return f"{group_label} – {label}"
+            return f"base_{prefix.lower()}_{subfield.lower()}"
 
-    return _humanize_field(field)
+    return f"base_{field.lower()}"
 
 
 def _base_station_icon(field):
@@ -442,7 +323,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
                         config_entry_id=entry.entry_id,
                         area_nr=BASE_STATION_KEY,
                         field=field,
-                        label=_base_station_label(field),
+                        translation_key=_base_station_translation_key(field),
                         unit=None,
                         device_class=None,
                         state_class=None,
@@ -463,7 +344,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
                         config_entry_id=entry.entry_id,
                         area_nr=device_key,
                         field=field,
-                        label=_io_device_label(field),
+                        translation_key=_io_device_translation_key(field),
                         unit=None,
                         device_class=None,
                         state_class=None,
@@ -475,7 +356,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
         if device_key.startswith(ACTOR_KEY_PREFIX):
             for field, (
-                label,
+                translation_key,
                 unit,
                 device_class,
                 state_class,
@@ -489,7 +370,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
                         config_entry_id=entry.entry_id,
                         area_nr=device_key,
                         field=field,
-                        label=label,
+                        translation_key=translation_key,
                         unit=unit,
                         device_class=device_class,
                         state_class=state_class,
@@ -501,7 +382,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
         # Existing heating-area sensors.
         for field, (
-            label,
+            translation_key,
             unit,
             device_class,
             state_class,
@@ -515,7 +396,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
                     config_entry_id=entry.entry_id,
                     area_nr=device_key,
                     field=field,
-                    label=label,
+                    translation_key=translation_key,
                     unit=unit,
                     device_class=device_class,
                     state_class=state_class,
@@ -537,7 +418,7 @@ class EzrSensor(CoordinatorEntity, SensorEntity):
         config_entry_id,
         area_nr,
         field,
-        label,
+        translation_key,
         unit,
         device_class,
         state_class,
@@ -552,7 +433,7 @@ class EzrSensor(CoordinatorEntity, SensorEntity):
         self._is_io_device = self.area_nr.startswith(IODEVICE_KEY_PREFIX)
         self._is_actor = self.area_nr.startswith(ACTOR_KEY_PREFIX)
 
-        self._attr_name = label
+        self._attr_translation_key = translation_key
         self._attr_native_unit_of_measurement = unit
         self._attr_device_class = device_class
         self._attr_state_class = state_class
@@ -586,30 +467,44 @@ class EzrSensor(CoordinatorEntity, SensorEntity):
                 BASE_STATION_KEY,
                 {},
             )
+            device_name = data.get("__name__")
 
             return {
                 "identifiers": {
                     (DOMAIN, f"{self.config_entry_id}_base_station"),
                 },
-                "name": str(
-                    data.get("__name__") or "EZR-Basisstation"
+                "name": str(device_name or "EZR Base Station"),
+                "translation_key": (
+                    "named_base_station" if device_name else "base_station"
+                ),
+                "translation_placeholders": (
+                    {"name": str(device_name)} if device_name else {}
                 ),
                 "manufacturer": MANUFACTURER,
-                "model": "Basisstation",
+                "model": str(data.get("__model__") or "EZR"),
             }
 
         if self._is_io_device:
             data = self.coordinator.data.get(self.area_nr, {})
             io_nr = self.area_nr.removeprefix(IODEVICE_KEY_PREFIX)
             area_nr = data.get("__area_nr__")
+            zone_name = data.get("__zone_name__")
 
             return {
                 "identifiers": {
                     (DOMAIN, f"{self.config_entry_id}_iodevice_{io_nr}"),
                 },
-                "name": str(data.get("__name__") or "Thermostat"),
+                "name": str(zone_name or f"Heating zone {area_nr}") + " Thermostat",
+                "translation_key": (
+                    "thermostat" if zone_name else "unnamed_thermostat"
+                ),
+                "translation_placeholders": (
+                    {"zone_name": str(zone_name)}
+                    if zone_name
+                    else {"zone_number": str(area_nr)}
+                ),
                 "manufacturer": MANUFACTURER,
-                "model": "Thermostat",
+                "model": "IODEVICE",
                 "via_device": (
                     DOMAIN,
                     f"{self.config_entry_id}_area_{area_nr}",
@@ -619,14 +514,21 @@ class EzrSensor(CoordinatorEntity, SensorEntity):
         if self._is_actor:
             data = self.coordinator.data.get(self.area_nr, {})
             area_nr = data.get("__area_nr__")
+            zone_name = data.get("__zone_name__")
 
             return {
                 "identifiers": {
                     (DOMAIN, f"{self.config_entry_id}_actor_{area_nr}"),
                 },
-                "name": str(data.get("__name__") or "Stellantrieb"),
+                "name": str(zone_name or f"Heating zone {area_nr}") + " Actuator",
+                "translation_key": "actuator" if zone_name else "unnamed_actuator",
+                "translation_placeholders": (
+                    {"zone_name": str(zone_name)}
+                    if zone_name
+                    else {"zone_number": str(area_nr)}
+                ),
                 "manufacturer": MANUFACTURER,
-                "model": "Stellantrieb",
+                "model": "HEATCTRL",
                 "via_device": (
                     DOMAIN,
                     f"{self.config_entry_id}_area_{area_nr}",
@@ -634,10 +536,7 @@ class EzrSensor(CoordinatorEntity, SensorEntity):
             }
 
         data = self.coordinator.data.get(self.area_nr, {})
-        area_name = (
-            data.get("HEATAREA_NAME")
-            or f"Heizzone {self.area_nr}"
-        )
+        area_name = data.get("HEATAREA_NAME")
 
         return {
             "identifiers": {
@@ -646,9 +545,17 @@ class EzrSensor(CoordinatorEntity, SensorEntity):
                     f"{self.config_entry_id}_area_{self.area_nr}",
                 ),
             },
-            "name": str(area_name),
+            "name": str(area_name or f"Heating zone {self.area_nr}"),
+            "translation_key": (
+                "heating_zone" if area_name else "unnamed_heating_zone"
+            ),
+            "translation_placeholders": (
+                {"zone_name": str(area_name)}
+                if area_name
+                else {"zone_number": self.area_nr}
+            ),
             "manufacturer": MANUFACTURER,
-            "model": "Heizzone",
+            "model": "HEATAREA",
         }
 
     @property

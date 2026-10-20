@@ -40,6 +40,9 @@ controller over the network.
 Set the polling interval in seconds. It defaults to 30 seconds and accepts
 values from 10 to 3600 seconds.
 
+The integration includes English fallback and German translations. Additional
+languages can be added under `translations/` using Home Assistant language codes.
+
 ## Home Assistant devices
 
 - The base station contains system and network information.
