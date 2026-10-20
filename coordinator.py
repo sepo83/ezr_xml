@@ -243,6 +243,7 @@ class EzrCoordinator(DataUpdateCoordinator):
                     data[field] = value
 
             controller = controllers_by_area.get(area_nr)
+            actor_data = None
 
             if controller is not None:
                 area_name = data.get("HEATAREA_NAME") or f"Heizzone {area_nr}"
@@ -261,9 +262,10 @@ class EzrCoordinator(DataUpdateCoordinator):
                     if value is not None:
                         actor_data[field] = value
 
-                result[f"{ACTOR_KEY_PREFIX}{area_nr}"] = actor_data
-
             result[area_nr] = data
+
+            if actor_data is not None:
+                result[f"{ACTOR_KEY_PREFIX}{area_nr}"] = actor_data
 
         for io_device in device.findall("IODEVICE"):
             io_nr = io_device.get("nr")
