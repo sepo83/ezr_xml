@@ -1,0 +1,4 @@
+"""Constants for EZR XML."""
+DOMAIN = "ezr_xml"
+DEFAULT_SCAN_INTERVAL = 30
+MANUFACTURER = "EZR"

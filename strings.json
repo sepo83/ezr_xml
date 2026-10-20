@@ -1,0 +1,20 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "EZR XML Heizungssteuerung",
+        "description": "Gib die Basis-URL deines EZR-Geräts ein, zum Beispiel {url_example}. Der Pfad /data/static.xml wird automatisch ergänzt.",
+        "data": {
+          "url": "Basis-URL des EZR-Geräts",
+          "scan_interval": "Abfrageintervall (Sekunden)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Verbindung zum EZR-Gerät fehlgeschlagen."
+    },
+    "abort": {
+      "already_configured": "Dieses EZR-Gerät ist bereits eingerichtet."
+    }
+  }
+}
