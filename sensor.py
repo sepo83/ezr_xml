@@ -504,6 +504,7 @@ class EzrSensor(CoordinatorEntity, SensorEntity):
                     else {"zone_number": str(area_nr)}
                 ),
                 "manufacturer": MANUFACTURER,
+                "model": "Thermostat",
                 "via_device": (
                     DOMAIN,
                     f"{self.config_entry_id}_area_{area_nr}",
@@ -527,6 +528,7 @@ class EzrSensor(CoordinatorEntity, SensorEntity):
                     else {"zone_number": str(area_nr)}
                 ),
                 "manufacturer": MANUFACTURER,
+                "model": "Actuator",
                 "via_device": (
                     DOMAIN,
                     f"{self.config_entry_id}_area_{area_nr}",
@@ -553,6 +555,7 @@ class EzrSensor(CoordinatorEntity, SensorEntity):
                 else {"zone_number": self.area_nr}
             ),
             "manufacturer": MANUFACTURER,
+            "model": "Heating zone",
         }
 
     @property

@@ -82,6 +82,7 @@ class EzrClimate(CoordinatorEntity, ClimateEntity):
                 else {"zone_number": self.area_nr}
             ),
             "manufacturer": MANUFACTURER,
+            "model": "Heating zone",
         }
 
     @property
