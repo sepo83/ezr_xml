@@ -118,11 +118,11 @@ SENSOR_FIELDS = {
     ),
 
     # Stellantrieb / ACTOR
-    "ACTOR": ("ACTOR – Stellantrieb", None, None, None),
-    "ACTOR_PERCENT": ("ACTOR – Ventilöffnung", PERCENTAGE, None, None),
-    "HEATCTRL_STATE": ("ACTOR – Heizstatus", None, None, None),
-    "HEATCTRL_NR": ("ACTOR – Zugeordneter Heizaktor", None, None, None),
-    "INUSE": ("ACTOR – Stellantrieb in Verwendung", None, None, None),
+    "ACTOR": ("Stellantrieb – Offen", None, None, None),
+    "ACTOR_PERCENT": ("Stellantrieb – Ventilöffnung", PERCENTAGE, None, None),
+    "HEATCTRL_STATE": ("Stellantrieb – Heizstatus", None, None, None),
+    "HEATCTRL_NR": ("Stellantrieb – Zugeordneter Heizaktor", None, None, None),
+    "INUSE": ("Stellantrieb – In Verwendung", None, None, None),
 }
 
 
