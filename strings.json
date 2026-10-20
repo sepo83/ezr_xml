@@ -3,10 +3,13 @@
     "step": {
       "user": {
         "title": "EZR XML Heizungssteuerung",
-        "description": "Gib die Basis-URL deines EZR-Geräts ein, zum Beispiel {url_example}. Der Pfad /data/static.xml wird automatisch ergänzt.",
+        "description": "Gib die Basis-URL deines EZR-Geräts ein. Der Pfad /data/static.xml wird automatisch ergänzt.",
         "data": {
           "url": "Basis-URL des EZR-Geräts",
           "scan_interval": "Abfrageintervall (Sekunden)"
+        },
+        "data_description": {
+          "url": "Beispiel: http://192.168.1.100"
         }
       }
     },

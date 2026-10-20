@@ -76,7 +76,4 @@ class EzrConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             step_id="user",
             data_schema=schema,
             errors=errors,
-            description_placeholders={
-                "url_example": "http://192.168.1.100",
-            },
         )
