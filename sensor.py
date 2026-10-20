@@ -424,6 +424,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
                 entities.append(
                     EzrSensor(
                         coordinator=coordinator,
+                        config_entry_id=entry.entry_id,
                         area_nr=BASE_STATION_KEY,
                         field=field,
                         label=_base_station_label(field),
@@ -449,6 +450,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
             entities.append(
                 EzrSensor(
                     coordinator=coordinator,
+                    config_entry_id=entry.entry_id,
                     area_nr=device_key,
                     field=field,
                     label=label,
@@ -470,6 +472,7 @@ class EzrSensor(CoordinatorEntity, SensorEntity):
     def __init__(
         self,
         coordinator,
+        config_entry_id,
         area_nr,
         field,
         label,
@@ -480,6 +483,7 @@ class EzrSensor(CoordinatorEntity, SensorEntity):
     ):
         super().__init__(coordinator)
 
+        self.config_entry_id = config_entry_id
         self.area_nr = str(area_nr)
         self.field = field
         self._is_base_station = self.area_nr == BASE_STATION_KEY
@@ -491,11 +495,11 @@ class EzrSensor(CoordinatorEntity, SensorEntity):
 
         if self._is_base_station:
             self._attr_unique_id = (
-                f"ezr_xml_base_station_{field.lower()}"
+                f"ezr_xml_{config_entry_id}_base_station_{field.lower()}"
             )
         else:
             self._attr_unique_id = (
-                f"ezr_xml_area_{area_nr}_{field.lower()}"
+                f"ezr_xml_{config_entry_id}_area_{area_nr}_{field.lower()}"
             )
 
         if icon:
@@ -512,7 +516,7 @@ class EzrSensor(CoordinatorEntity, SensorEntity):
 
             return {
                 "identifiers": {
-                    (DOMAIN, "base_station"),
+                    (DOMAIN, f"{self.config_entry_id}_base_station"),
                 },
                 "name": str(
                     data.get("__name__") or "EZR-Basisstation"
@@ -529,7 +533,10 @@ class EzrSensor(CoordinatorEntity, SensorEntity):
 
         return {
             "identifiers": {
-                (DOMAIN, f"area_{self.area_nr}"),
+                (
+                    DOMAIN,
+                    f"{self.config_entry_id}_area_{self.area_nr}",
+                ),
             },
             "name": str(area_name),
             "manufacturer": MANUFACTURER,
