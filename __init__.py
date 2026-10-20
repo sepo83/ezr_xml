@@ -8,7 +8,7 @@ from homeassistant.helpers.update_coordinator import ConfigEntryNotReady
 
 from .const import DOMAIN
 from .coordinator import EzrCoordinator
-PLATFORMS = [Platform.SENSOR]
+PLATFORMS = [Platform.SENSOR, Platform.CLIMATE]
 
 
 async def async_setup(hass: HomeAssistant, config: dict) -> bool:

@@ -1,19 +1,20 @@
 # EZR XML
 
-A read-only Home Assistant custom integration for Möhlenhoff Alpha 2 heating
-controllers that expose their data through the local XML interface.
+A Home Assistant custom integration for Möhlenhoff Alpha 2 heating controllers
+that expose their data through the local XML interface.
 
 ## Features
 
 - Polls the controller's `static.xml` endpoint over the local network.
 - Creates separate Home Assistant devices for the base station, heating zones,
   actuators, and associated thermostats.
+- Adds a writable Climate entity to each heating zone, with target temperature,
+  automatic/day/night presets, and global heating/cooling mode.
 - Exposes available temperatures, target values, operating states, program
   information, actuator data, and device status as sensors.
 - Supports configurable polling intervals from 10 seconds to 1 hour.
 
-This integration only reads controller data. It does not control heating zones
-or change controller settings.
+Climate commands use the controller's local `/data/changes.xml` endpoint.
 
 ## Installation
 

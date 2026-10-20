@@ -1,14 +1,17 @@
 """Fetch and parse EZR XML."""
 from __future__ import annotations
 
+import asyncio
 import logging
 import re
 from datetime import timedelta
 import xml.etree.ElementTree as ET
 
 import aiohttp
+from moehlenhoff_alpha2 import Alpha2Base
 
 from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.update_coordinator import (
     DataUpdateCoordinator,
     UpdateFailed,
@@ -171,6 +174,9 @@ class EzrCoordinator(DataUpdateCoordinator):
         scan_interval: int,
     ):
         self.url = url
+        self._command_lock = asyncio.Lock()
+        self._alpha2 = Alpha2Base(url)
+        self._alpha2.base_url = url.removesuffix("/data/static.xml")
 
         super().__init__(
             hass,
@@ -178,6 +184,98 @@ class EzrCoordinator(DataUpdateCoordinator):
             name="EZR XML",
             update_interval=timedelta(seconds=scan_interval),
         )
+
+    async def async_set_target_temperature(
+        self,
+        area_nr: str,
+        target_temperature: float,
+    ) -> None:
+        """Set a zone target using the Alpha2 changes.xml API."""
+        async with self._command_lock:
+            await self._alpha2.update_data()
+            area_data = next(
+                (
+                    area
+                    for area in self._alpha2.heat_areas
+                    if str(area["NR"]) == area_nr
+                ),
+                None,
+            )
+            if area_data is None:
+                raise HomeAssistantError(f"Unknown EZR heating zone: {area_nr}")
+
+            update_data = {"T_TARGET": target_temperature}
+            mode = area_data.get("HEATAREA_MODE", 0)
+            if mode in (1, 2):
+                period = "DAY" if mode == 1 else "NIGHT"
+                temperature_type = "COOL" if self._alpha2.cooling else "HEAT"
+                update_data[f"T_{temperature_type}_{period}"] = target_temperature
+
+            try:
+                await self._alpha2.update_heat_area(area_nr, update_data)
+            except (aiohttp.ClientError, TimeoutError) as err:
+                raise HomeAssistantError(
+                    "Failed to set EZR target temperature"
+                ) from err
+
+            self.data[area_nr].update(update_data)
+            self.async_update_listeners()
+
+    async def async_set_heat_area_mode(
+        self,
+        area_nr: str,
+        preset_mode: str,
+    ) -> None:
+        """Set the automatic, day, or night preset for a heating zone."""
+        mode_by_preset = {"auto": 0, "day": 1, "night": 2}
+        if preset_mode not in mode_by_preset:
+            raise ValueError(f"Invalid EZR preset mode: {preset_mode}")
+
+        async with self._command_lock:
+            await self._alpha2.update_data()
+            area_data = next(
+                (
+                    area
+                    for area in self._alpha2.heat_areas
+                    if str(area["NR"]) == area_nr
+                ),
+                None,
+            )
+            if area_data is None:
+                raise HomeAssistantError(f"Unknown EZR heating zone: {area_nr}")
+
+            mode = mode_by_preset[preset_mode]
+            update_data = {"HEATAREA_MODE": mode}
+            if mode in (1, 2):
+                period = "DAY" if mode == 1 else "NIGHT"
+                temperature_type = "COOL" if self._alpha2.cooling else "HEAT"
+                target = area_data.get(f"T_{temperature_type}_{period}")
+                if target is not None:
+                    update_data["T_TARGET"] = target
+
+            try:
+                await self._alpha2.update_heat_area(area_nr, update_data)
+            except (aiohttp.ClientError, TimeoutError) as err:
+                raise HomeAssistantError(
+                    "Failed to set EZR heating-zone preset"
+                ) from err
+
+            self.data[area_nr].update(update_data)
+            self.async_update_listeners()
+
+    async def async_set_cooling(self, enabled: bool) -> None:
+        """Set the base station's global heating or cooling mode."""
+        async with self._command_lock:
+            await self._alpha2.update_data()
+            try:
+                await self._alpha2.set_cooling(enabled)
+            except (aiohttp.ClientError, TimeoutError) as err:
+                raise HomeAssistantError(
+                    "Failed to set EZR heating/cooling mode"
+                ) from err
+
+            self.data[BASE_STATION_KEY]["SYSTEM_COOLING"] = int(enabled)
+            self.async_update_listeners()
 
     async def _async_update_data(self):
         """Fetch XML and return area and base-station data."""
