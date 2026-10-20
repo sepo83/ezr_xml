@@ -17,6 +17,7 @@ from homeassistant.helpers.update_coordinator import (
 _LOGGER = logging.getLogger(__name__)
 
 BASE_STATION_KEY = "__base_station__"
+IODEVICE_KEY_PREFIX = "__iodevice_"
 
 # Diese XML-Gruppen werden bewusst nicht verarbeitet.
 EXCLUDED_GROUPS = {
@@ -156,16 +157,6 @@ def _build_base_station(device):
         if value is not None:
             result[f"SYSTEM_{child.tag}"] = value
 
-    # Read every I/O device by its explicit nr attribute.
-    for io_device in device.findall("IODEVICE"):
-        io_nr = io_device.get("nr")
-
-        if io_nr is None:
-            continue
-
-        prefix = f"IODEVICE_{io_nr}"
-        _flatten_group(io_device, prefix, result)
-
     return result
 
 
@@ -265,6 +256,25 @@ class EzrCoordinator(DataUpdateCoordinator):
                         data[field] = value
 
             result[area_nr] = data
+
+        for io_device in device.findall("IODEVICE"):
+            io_nr = io_device.get("nr")
+            area_nr = _value(io_device, "HEATAREA_NR")
+
+            if io_nr is None or area_nr is None:
+                continue
+
+            area_key = str(area_nr)
+
+            if area_key not in result:
+                continue
+
+            io_data = {
+                "__name__": "Thermostat",
+                "__area_nr__": area_key,
+            }
+            _flatten_group(io_device, f"IODEVICE_{io_nr}", io_data)
+            result[f"{IODEVICE_KEY_PREFIX}{io_nr}"] = io_data
 
         if not areas:
             raise UpdateFailed(
