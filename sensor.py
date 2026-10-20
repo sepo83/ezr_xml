@@ -12,7 +12,11 @@ from homeassistant.const import UnitOfTemperature, PERCENTAGE
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN, MANUFACTURER
-from .coordinator import BASE_STATION_KEY, IODEVICE_KEY_PREFIX
+from .coordinator import (
+    ACTOR_KEY_PREFIX,
+    BASE_STATION_KEY,
+    IODEVICE_KEY_PREFIX,
+)
 
 
 SENSOR_FIELDS = {
@@ -469,6 +473,32 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
             continue
 
+        if device_key.startswith(ACTOR_KEY_PREFIX):
+            for field, (
+                label,
+                unit,
+                device_class,
+                state_class,
+            ) in SENSOR_FIELDS.items():
+                if field not in data:
+                    continue
+
+                entities.append(
+                    EzrSensor(
+                        coordinator=coordinator,
+                        config_entry_id=entry.entry_id,
+                        area_nr=device_key,
+                        field=field,
+                        label=label,
+                        unit=unit,
+                        device_class=device_class,
+                        state_class=state_class,
+                        icon=SENSOR_ICONS.get(field),
+                    )
+                )
+
+            continue
+
         # Existing heating-area sensors.
         for field, (
             label,
@@ -520,6 +550,7 @@ class EzrSensor(CoordinatorEntity, SensorEntity):
         self.field = field
         self._is_base_station = self.area_nr == BASE_STATION_KEY
         self._is_io_device = self.area_nr.startswith(IODEVICE_KEY_PREFIX)
+        self._is_actor = self.area_nr.startswith(ACTOR_KEY_PREFIX)
 
         self._attr_name = label
         self._attr_native_unit_of_measurement = unit
@@ -533,6 +564,11 @@ class EzrSensor(CoordinatorEntity, SensorEntity):
         elif self._is_io_device:
             self._attr_unique_id = (
                 f"ezr_xml_{config_entry_id}_base_station_{field.lower()}"
+            )
+        elif self._is_actor:
+            zone_nr = self.area_nr.removeprefix(ACTOR_KEY_PREFIX)
+            self._attr_unique_id = (
+                f"ezr_xml_{config_entry_id}_area_{zone_nr}_{field.lower()}"
             )
         else:
             self._attr_unique_id = (
@@ -574,6 +610,23 @@ class EzrSensor(CoordinatorEntity, SensorEntity):
                 "name": str(data.get("__name__") or "Thermostat"),
                 "manufacturer": MANUFACTURER,
                 "model": "Thermostat",
+                "via_device": (
+                    DOMAIN,
+                    f"{self.config_entry_id}_area_{area_nr}",
+                ),
+            }
+
+        if self._is_actor:
+            data = self.coordinator.data.get(self.area_nr, {})
+            area_nr = data.get("__area_nr__")
+
+            return {
+                "identifiers": {
+                    (DOMAIN, f"{self.config_entry_id}_actor_{area_nr}"),
+                },
+                "name": str(data.get("__name__") or "Stellantrieb"),
+                "manufacturer": MANUFACTURER,
+                "model": "Stellantrieb",
                 "via_device": (
                     DOMAIN,
                     f"{self.config_entry_id}_area_{area_nr}",

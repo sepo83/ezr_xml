@@ -18,6 +18,7 @@ _LOGGER = logging.getLogger(__name__)
 
 BASE_STATION_KEY = "__base_station__"
 IODEVICE_KEY_PREFIX = "__iodevice_"
+ACTOR_KEY_PREFIX = "__actor_"
 
 # Diese XML-Gruppen werden bewusst nicht verarbeitet.
 EXCLUDED_GROUPS = {
@@ -244,16 +245,23 @@ class EzrCoordinator(DataUpdateCoordinator):
             controller = controllers_by_area.get(area_nr)
 
             if controller is not None:
+                area_name = data.get("HEATAREA_NAME") or f"Heizzone {area_nr}"
+                actor_data = {
+                    "__name__": f"{area_name} Stellantrieb",
+                    "__area_nr__": area_nr,
+                }
                 controller_nr = controller.get("nr")
 
                 if controller_nr is not None:
-                    data["HEATCTRL_NR"] = int(controller_nr)
+                    actor_data["HEATCTRL_NR"] = int(controller_nr)
 
                 for field in ACTOR_FIELDS:
                     value = _value(controller, field)
 
                     if value is not None:
-                        data[field] = value
+                        actor_data[field] = value
+
+                result[f"{ACTOR_KEY_PREFIX}{area_nr}"] = actor_data
 
             result[area_nr] = data
 
