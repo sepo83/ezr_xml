@@ -354,6 +354,17 @@ def _humanize_field(field):
     return field.replace("_", " ").capitalize()
 
 
+def _io_device_label(field):
+    """Return an I/O device field label without a device prefix."""
+    match = re.fullmatch(r"IODEVICE_\d+_(.+)", field)
+
+    if not match:
+        return _humanize_field(field)
+
+    subfield = match.group(1)
+    return BASE_FIELD_LABELS.get(subfield, _humanize_field(subfield))
+
+
 def _base_station_label(field):
     """Create a German name with the group name as prefix."""
     match = re.fullmatch(r"IODEVICE_(\d+)_(.+)", field)
@@ -448,7 +459,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
                         config_entry_id=entry.entry_id,
                         area_nr=device_key,
                         field=field,
-                        label=_base_station_label(field),
+                        label=_io_device_label(field),
                         unit=None,
                         device_class=None,
                         state_class=None,

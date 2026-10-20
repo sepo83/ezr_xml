@@ -269,8 +269,10 @@ class EzrCoordinator(DataUpdateCoordinator):
             if area_key not in result:
                 continue
 
+            area_name = result[area_key].get("HEATAREA_NAME")
+            area_name = area_name or f"Heizzone {area_key}"
             io_data = {
-                "__name__": "Thermostat",
+                "__name__": f"{area_name} Thermostat",
                 "__area_nr__": area_key,
             }
             _flatten_group(io_device, f"IODEVICE_{io_nr}", io_data)
