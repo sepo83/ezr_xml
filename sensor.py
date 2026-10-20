@@ -20,7 +20,7 @@ from .coordinator import (
 
 
 SENSOR_FIELDS = {
-    "HEATAREA_NAME": ("Name", None, None, None),
+    "HEATAREA_NAME": ("Heizzonenname", None, None, None),
     "HEATAREA_MODE": ("Betriebsmodus", None, None, None),
     "T_ACTUAL": (
         "Isttemperatur",
