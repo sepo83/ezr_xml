@@ -4,7 +4,8 @@ from __future__ import annotations
 import asyncio
 import logging
 import re
-from datetime import timedelta
+from datetime import datetime, timedelta, timezone
+from email.utils import parsedate_to_datetime
 import xml.etree.ElementTree as ET
 
 import aiohttp
@@ -23,6 +24,8 @@ _LOGGER = logging.getLogger(__name__)
 BASE_STATION_KEY = "__base_station__"
 IODEVICE_KEY_PREFIX = "__iodevice_"
 ACTOR_KEY_PREFIX = "__actor_"
+MAX_XML_SIZE = 2 * 1024 * 1024
+MAX_RETRY_AFTER = 10
 
 # Diese XML-Gruppen werden bewusst nicht verarbeitet.
 EXCLUDED_GROUPS = {
@@ -165,6 +168,28 @@ def _build_base_station(device):
     return result
 
 
+def _retry_delay(error):
+    """Return a bounded retry delay, honoring a valid Retry-After header."""
+    headers = getattr(error, "headers", None)
+    retry_after = headers.get("Retry-After") if headers else None
+
+    if retry_after is None:
+        return 0.5
+
+    try:
+        delay = float(retry_after)
+    except ValueError:
+        try:
+            retry_at = parsedate_to_datetime(retry_after)
+            if retry_at.tzinfo is None:
+                retry_at = retry_at.replace(tzinfo=timezone.utc)
+            delay = (retry_at - datetime.now(timezone.utc)).total_seconds()
+        except (TypeError, ValueError, OverflowError):
+            return 0.5
+
+    return min(MAX_RETRY_AFTER, max(0, delay))
+
+
 class EzrCoordinator(DataUpdateCoordinator):
     """Coordinate XML updates."""
 
@@ -175,6 +200,7 @@ class EzrCoordinator(DataUpdateCoordinator):
         scan_interval: int,
     ):
         self.url = url
+        self._last_fetch_failed = False
         self._command_lock = asyncio.Lock()
         self._alpha2 = Alpha2Base(url)
         self._alpha2.base_url = url.removesuffix("/data/static.xml")
@@ -301,7 +327,21 @@ class EzrCoordinator(DataUpdateCoordinator):
                 try:
                     async with session.get(self.url, timeout=timeout) as response:
                         response.raise_for_status()
-                        content = await response.read()
+                        if (
+                            response.content_length is not None
+                            and response.content_length > MAX_XML_SIZE
+                        ):
+                            raise UpdateFailed(
+                                "EZR XML response exceeds the size limit"
+                            )
+
+                        content = bytearray()
+                        async for chunk in response.content.iter_chunked(65536):
+                            content.extend(chunk)
+                            if len(content) > MAX_XML_SIZE:
+                                raise UpdateFailed(
+                                    "EZR XML response exceeds the size limit"
+                                )
 
                     root = ET.fromstring(content)
                     break
@@ -312,7 +352,7 @@ class EzrCoordinator(DataUpdateCoordinator):
                 ) as err:
                     retryable_status = (
                         isinstance(err, aiohttp.ClientResponseError)
-                        and (err.status == 429 or err.status >= 500)
+                        and (err.status in (408, 429) or err.status >= 500)
                     )
                     retryable_error = not isinstance(
                         err, aiohttp.ClientResponseError
@@ -323,27 +363,45 @@ class EzrCoordinator(DataUpdateCoordinator):
 
                     if isinstance(err, ET.ParseError):
                         _LOGGER.warning(
-                            "EZR XML response was malformed; retrying once"
+                            "EZR XML parse error at line %s, column %s; retrying once",
+                            *err.position,
+                        )
+                    elif isinstance(err, aiohttp.ClientResponseError):
+                        _LOGGER.warning(
+                            "EZR XML request returned HTTP %s; retrying once",
+                            err.status,
                         )
                     else:
                         _LOGGER.warning(
                             "EZR XML request failed (%s); retrying once",
                             type(err).__name__,
                         )
-                    await asyncio.sleep(0.5)
+                    await asyncio.sleep(_retry_delay(err))
 
+        except UpdateFailed:
+            self._last_fetch_failed = True
+            raise
         except (
             aiohttp.ClientError,
             ET.ParseError,
             TimeoutError,
         ) as err:
-            raise UpdateFailed(
-                f"Unable to fetch or parse XML: {err}"
-            ) from err
+            self._last_fetch_failed = True
+            if isinstance(err, ET.ParseError):
+                line, column = err.position
+                message = f"XML parse error at line {line}, column {column}"
+            elif isinstance(err, aiohttp.ClientResponseError):
+                message = f"HTTP {err.status}"
+            elif isinstance(err, TimeoutError):
+                message = "request timed out"
+            else:
+                message = type(err).__name__
+            raise UpdateFailed(f"Unable to fetch or parse XML: {message}") from err
 
         device = root.find(".//Device")
 
         if device is None:
+            self._last_fetch_failed = True
             raise UpdateFailed("No Device element found in the XML")
 
         # The base station gets its own device in Home Assistant.
@@ -426,6 +484,11 @@ class EzrCoordinator(DataUpdateCoordinator):
             result[f"{IODEVICE_KEY_PREFIX}{io_nr}"] = io_data
 
         if not areas:
+            self._last_fetch_failed = True
             raise UpdateFailed("No HEATAREA elements found in the XML")
+
+        if self._last_fetch_failed:
+            _LOGGER.info("EZR XML data fetch recovered")
+            self._last_fetch_failed = False
 
         return result
