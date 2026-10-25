@@ -12,6 +12,7 @@ from moehlenhoff_alpha2 import Alpha2Base
 
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import (
     DataUpdateCoordinator,
     UpdateFailed,
@@ -192,7 +193,9 @@ class EzrCoordinator(DataUpdateCoordinator):
     ) -> None:
         """Set a zone target using the Alpha2 changes.xml API."""
         async with self._command_lock:
-            await self._alpha2.update_data()
+            await self._async_refresh_alpha2(
+                "Failed to set EZR target temperature"
+            )
             area_data = next(
                 (
                     area
@@ -232,7 +235,9 @@ class EzrCoordinator(DataUpdateCoordinator):
             raise ValueError(f"Invalid EZR preset mode: {preset_mode}")
 
         async with self._command_lock:
-            await self._alpha2.update_data()
+            await self._async_refresh_alpha2(
+                "Failed to set EZR heating-zone preset"
+            )
             area_data = next(
                 (
                     area
@@ -266,7 +271,9 @@ class EzrCoordinator(DataUpdateCoordinator):
     async def async_set_cooling(self, enabled: bool) -> None:
         """Set the base station's global heating or cooling mode."""
         async with self._command_lock:
-            await self._alpha2.update_data()
+            await self._async_refresh_alpha2(
+                "Failed to set EZR heating/cooling mode"
+            )
             try:
                 await self._alpha2.set_cooling(enabled)
             except (aiohttp.ClientError, TimeoutError) as err:
@@ -277,27 +284,53 @@ class EzrCoordinator(DataUpdateCoordinator):
             self.data[BASE_STATION_KEY]["SYSTEM_COOLING"] = int(enabled)
             self.async_update_listeners()
 
+    async def _async_refresh_alpha2(self, error_message: str) -> None:
+        """Refresh the library data and translate transport errors for HA."""
+        try:
+            await self._alpha2.update_data()
+        except (aiohttp.ClientError, TimeoutError) as err:
+            raise HomeAssistantError(error_message) from err
+
     async def _async_update_data(self):
         """Fetch XML and return area and base-station data."""
         try:
             timeout = aiohttp.ClientTimeout(total=15)
+            session = async_get_clientsession(self.hass)
 
-            async with aiohttp.ClientSession(timeout=timeout) as session:
-                for attempt in range(2):
-                    async with session.get(self.url) as response:
+            for attempt in range(2):
+                try:
+                    async with session.get(self.url, timeout=timeout) as response:
                         response.raise_for_status()
                         content = await response.read()
 
-                    try:
-                        root = ET.fromstring(content)
-                        break
-                    except ET.ParseError:
-                        if attempt == 1:
-                            raise
+                    root = ET.fromstring(content)
+                    break
+                except (
+                    ET.ParseError,
+                    aiohttp.ClientError,
+                    asyncio.TimeoutError,
+                ) as err:
+                    retryable_status = (
+                        isinstance(err, aiohttp.ClientResponseError)
+                        and (err.status == 429 or err.status >= 500)
+                    )
+                    retryable_error = not isinstance(
+                        err, aiohttp.ClientResponseError
+                    ) or retryable_status
+
+                    if attempt == 1 or not retryable_error:
+                        raise
+
+                    if isinstance(err, ET.ParseError):
                         _LOGGER.warning(
                             "EZR XML response was malformed; retrying once"
                         )
-                        await asyncio.sleep(0.5)
+                    else:
+                        _LOGGER.warning(
+                            "EZR XML request failed (%s); retrying once",
+                            type(err).__name__,
+                        )
+                    await asyncio.sleep(0.5)
 
         except (
             aiohttp.ClientError,
