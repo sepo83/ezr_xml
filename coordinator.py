@@ -283,11 +283,21 @@ class EzrCoordinator(DataUpdateCoordinator):
             timeout = aiohttp.ClientTimeout(total=15)
 
             async with aiohttp.ClientSession(timeout=timeout) as session:
-                async with session.get(self.url) as response:
-                    response.raise_for_status()
-                    content = await response.read()
+                for attempt in range(2):
+                    async with session.get(self.url) as response:
+                        response.raise_for_status()
+                        content = await response.read()
 
-            root = ET.fromstring(content)
+                    try:
+                        root = ET.fromstring(content)
+                        break
+                    except ET.ParseError:
+                        if attempt == 1:
+                            raise
+                        _LOGGER.warning(
+                            "EZR XML response was malformed; retrying once"
+                        )
+                        await asyncio.sleep(0.5)
 
         except (
             aiohttp.ClientError,
