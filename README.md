@@ -52,3 +52,7 @@ languages can be added under `translations/` using Home Assistant language codes
   `HEATAREA_NR` value.
 
 Sensor names and availability depend on the fields returned by the controller.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
