@@ -1,5 +1,7 @@
 # EZR XML
 
+A custom Home Assistant integration for Möhlenhoff Alpha 2 heating controllers that exposes local XML data as devices, sensors, and climate entities.
+
 A Home Assistant custom integration for Möhlenhoff Alpha 2 heating controllers
 that expose their data through the local XML interface.
 
